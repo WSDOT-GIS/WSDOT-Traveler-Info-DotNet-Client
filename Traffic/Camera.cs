@@ -26,17 +26,9 @@ namespace Wsdot.Traffic
 
 		public Feature ToFeature(bool includeSpatialReference = false, int? outSR=null)
 		{
-
-			Point point = new Point
+			return new Feature
 			{
-				x = Convert.ToDouble(CameraLocation.Longitude),
-				y = Convert.ToDouble(CameraLocation.Latitude),
-				spatialReference = includeSpatialReference ? new WkidBasedSpatialReference { wkid = 4326 } : null
-			};
-
-			var feature = new Feature
-			{
-				geometry = point,
+				geometry = CameraLocation.ToPoint(includeSpatialReference, outSR),
 				attributes = new
 				{
 					CameraID = CameraID,
@@ -55,30 +47,6 @@ namespace Wsdot.Traffic
 					MilePost = CameraLocation.MilePost
 				}
 			};
-
-			if (outSR.HasValue && outSR != 4326)
-			{
-				ProjectionInfo startProj = KnownCoordinateSystems.Geographic.World.WGS1984;
-				ProjectionInfo endProj = null;
-				if (outSR.Value == 102100 || outSR.Value == 3857)
-				{
-					endProj = KnownCoordinateSystems.Projected.World.WebMercator;
-				}
-				else
-				{
-					throw new NotSupportedException("The specified output coordinate system is not supported.");
-				}
-
-				double[] xy = { Convert.ToDouble(CameraLocation.Longitude), Convert.ToDouble(CameraLocation.Latitude) };
-
-				Reproject.ReprojectPoints(xy, null, startProj, endProj, 0, 1);
-
-				point.x = xy[0];
-				point.y = xy[1];
-
-			}
-
-			return feature;
 		}
 
 	}
