@@ -7,36 +7,36 @@ namespace Wsdot.Traffic
 {
     public class CVRestriction
     {
-        string StateRouteID { get; set; }
-        string State { get; set; }
-        int RestrictionWidthInInches { get; set; }
-        int RestrictionHeightInInches { get; set; }
-        int RestrictionLengthInInches { get; set; }
-        int RestrictionWeightInPounds { get; set; }
-        bool IsDetourAvailable { get; set; }
-        bool IsPermanentRestriction { get; set; }
-        bool IsExceptionsAllowed { get; set; }
-        bool IsWarning { get; set; }
-        DateTime DatePosted { get; set; }
-        DateTime DateEffective { get; set; }
-        DateTime DateExpires { get; set; }
-        string LocationName { get; set; }
-        string LocationDescription { get; set; }
-        string RestrictionComment { get; set; }
-        double Latitude { get; set; }
-        double Longitude { get; set; }
-        string BridgeNumber { get; set; }
-        int MaximumGrossVehicleWeightInPounds { get; set; }
-        string BridgeName { get; set; }
-        int BLMaxAxle { get; set; }
-        int CL8MaxAxle { get; set; }
-        int SAMaxAxle { get; set; }
-        int TDMaxAxle { get; set; }
-        string VehicleType { get; set; }
-        CommercialVehicleRestrictionType RestrictionType { get; set; }
+        public string StateRouteID { get; set; }
+        public string State { get; set; }
+        public int RestrictionWidthInInches { get; set; }
+        public int RestrictionHeightInInches { get; set; }
+        public int RestrictionLengthInInches { get; set; }
+        public int RestrictionWeightInPounds { get; set; }
+        public bool IsDetourAvailable { get; set; }
+        public bool IsPermanentRestriction { get; set; }
+        public bool IsExceptionsAllowed { get; set; }
+        public bool IsWarning { get; set; }
+        public DateTime DatePosted { get; set; }
+        public DateTime DateEffective { get; set; }
+        public DateTime DateExpires { get; set; }
+        public string LocationName { get; set; }
+        public string LocationDescription { get; set; }
+        public string RestrictionComment { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public string BridgeNumber { get; set; }
+        public int MaximumGrossVehicleWeightInPounds { get; set; }
+        public string BridgeName { get; set; }
+        public int BLMaxAxle { get; set; }
+        public int CL8MaxAxle { get; set; }
+        public int SAMaxAxle { get; set; }
+        public int TDMaxAxle { get; set; }
+        public string VehicleType { get; set; }
+        public CommercialVehicleRestrictionType RestrictionType { get; set; }
 
-        RoadwayLocation StartRoadwayLocation { get; set; }
-        RoadwayLocation EndRoadwayLocation { get; set; }
+        public RoadwayLocation StartRoadwayLocation { get; set; }
+        public RoadwayLocation EndRoadwayLocation { get; set; }
     }
 
     public enum CommercialVehicleRestrictionType

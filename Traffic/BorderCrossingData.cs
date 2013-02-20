@@ -7,10 +7,10 @@ namespace Wsdot.Traffic
 {
     public class BorderCrossingData: ITrafficFeature
     {
-        DateTime Time { get; set; }
-        string CrossingName { get; set; }
-        RoadwayLocation BorderCrossingLocation { get; set; }
-        int WaitTime { get; set; }
+        public DateTime Time { get; set; }
+        public string CrossingName { get; set; }
+        public RoadwayLocation BorderCrossingLocation { get; set; }
+        public int WaitTime { get; set; }
 
         public TravelerInfoMapServices.Feature ToFeature(bool includeSpatialReference = false, int? outSR = null)
         {
