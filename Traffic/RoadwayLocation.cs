@@ -24,7 +24,7 @@ namespace Wsdot.Traffic
 		/// <summary>
 		/// The milepost of the location. 
 		/// </summary>
-		public decimal MilePost { get; set; }
+		public double MilePost { get; set; }
 		/// <summary>
 		/// Latitude of the location. 
 		/// </summary>

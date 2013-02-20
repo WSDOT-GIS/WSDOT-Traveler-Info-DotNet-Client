@@ -1,4 +1,5 @@
-﻿using TravelerInfoMapServices;
+﻿using System.Collections.Generic;
+using TravelerInfoMapServices;
 
 namespace Wsdot.Traffic
 {
@@ -7,6 +8,6 @@ namespace Wsdot.Traffic
 	/// </summary>
 	public interface ITrafficFeature
 	{
-		Feature ToFeature(bool includeSpatialReference=false);
+		Feature ToFeature(bool includeSpatialReference=false, int? outSR=null);
 	}
 }
