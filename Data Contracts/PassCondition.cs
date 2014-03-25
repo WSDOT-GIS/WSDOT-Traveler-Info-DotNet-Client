@@ -35,7 +35,7 @@ namespace Wsdot.Traffic
         /// <summary>
         /// The temperature reading at the mountain pass in degrees fahrenheit.
         /// </summary>
-        public int TemperatureInFahrenheit { get; set; }
+        public int? TemperatureInFahrenheit { get; set; }
 
         /// <summary>
         /// The elevation of the mountain pass in feet.

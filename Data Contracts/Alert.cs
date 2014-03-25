@@ -5,7 +5,7 @@ namespace Wsdot.Traffic
     /// <summary>
     /// A highway alert.
     /// </summary>
-    public class Alert: ITrafficFeature
+    public class Alert
     {
         /// <summary>
         /// Unique Identifier for the alert
@@ -26,7 +26,7 @@ namespace Wsdot.Traffic
         /// <summary>
         /// Estimated end time for alert
         /// </summary>
-        public DateTime EndTime { get; set; }
+        public DateTime? EndTime { get; set; }
 
 
         /// <summary>
@@ -79,13 +79,5 @@ namespace Wsdot.Traffic
         /// When the impact on traffic began
         /// </summary>
         public DateTime StartTime { get; set; }
-
-
-
-
-        public TravelerInfoMapServices.Feature ToFeature(bool includeSpatialReference = false, int? outSR = null)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
