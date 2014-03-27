@@ -1,8 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Wsdot.Traffic;
 using Wsdot.Traffic.Client;
+using WsdotTravelerInfoContracts.Ferries.Terminals;
 
 namespace UnitTest
 {
@@ -12,12 +15,13 @@ namespace UnitTest
 		public TestContext TestContext { get; set; }
 
 		TrafficClient _trafficClient;
+		WsfClient _wsfClient;
 
 		[TestInitialize]
 		public void TestInit()
 		{
 			_trafficClient = new TrafficClient { AccessCode = accessCode };
-
+			_wsfClient = new WsfClient { AccessCode = accessCode };
 		}
 
 		[TestMethod]
@@ -129,5 +133,42 @@ namespace UnitTest
 			Assert.IsNotNull(arr);
 			Assert.IsTrue(arr.Length > 0);
 		}
+
+		#region WSF Tests
+
+		[TestMethod]
+		public void TestCacheFlushDate()
+		{
+			DateTimeOffset cacheFlushDate;
+			_wsfClient.GetCacheFlushDate().ContinueWith(t => {
+				cacheFlushDate = t.Result;
+				TestContext.WriteLine("Cache Flush Date: {0}", cacheFlushDate);
+			}).Wait();
+
+		}
+
+		[TestMethod]
+		public void TestWsfQueries()
+		{
+			var queryTypes = Enum.GetValues(typeof(TerminalQueryType));
+
+			foreach (TerminalQueryType qt in queryTypes)
+			{
+				TestContext.WriteLine("Performing test on {0}...", qt);
+				var task = _wsfClient.Query(qt);
+				task.Wait();
+				Terminal[] terminals = task.Result;
+				Assert.IsNotNull(terminals);
+				Assert.IsTrue(terminals.Length > 0);
+
+				var task2 = _wsfClient.Query(qt, terminals.First().TerminalID);
+				task2.Wait();
+				Terminal terminal = task2.Result;
+				Assert.IsNotNull(terminal);
+				TestContext.WriteLine("Completed test on {0}...", qt);
+			}
+		}
+
+		#endregion
 	}
 }

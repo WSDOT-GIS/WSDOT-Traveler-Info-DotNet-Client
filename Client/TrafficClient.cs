@@ -12,9 +12,9 @@ namespace Wsdot.Traffic.Client
 	{
 		public string AccessCode { get; set; }
 
-		const string defaultApiRoot = "http://www.wsdot.wa.gov/Traffic/api";
+		const string _defaultApiRoot = "http://www.wsdot.wa.gov/Traffic/api";
 
-		private string _apiRoot = defaultApiRoot;
+		private string _apiRoot = _defaultApiRoot;
 
 		public string ApiRoot
 		{
@@ -35,6 +35,8 @@ namespace Wsdot.Traffic.Client
 			}
 			return output;
 		}
+
+
 
 		public async Task<BorderCrossingData[]> GetBorderCrossings()
 		{

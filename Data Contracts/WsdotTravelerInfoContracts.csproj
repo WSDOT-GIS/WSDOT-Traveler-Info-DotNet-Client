@@ -44,6 +44,8 @@
     <Compile Include="BorderCrossingData.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="CVRestriction.cs" />
+    <Compile Include="Ferries\Terminals\SailingSpace.cs" />
+    <Compile Include="Ferries\Terminals\Terminals.cs" />
     <Compile Include="FlowData.cs" />
     <Compile Include="PassCondition.cs" />
     <Compile Include="RoadwayLocation.cs" />
