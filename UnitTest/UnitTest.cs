@@ -153,7 +153,7 @@ namespace UnitTest
 			foreach (TerminalQueryType qt in queryTypes)
 			{
 				TestContext.WriteLine("Performing test on {0}...", qt);
-				var task = _wsfClient.Query(qt);
+				var task = _wsfClient.Query<Terminal[]>(qt);
 				task.Wait();
 				Terminal[] terminals = task.Result;
 				Assert.IsNotNull(terminals);
