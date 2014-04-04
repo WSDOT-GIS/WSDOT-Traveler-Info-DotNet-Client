@@ -6,7 +6,7 @@
     <ProjectGuid>{6509E4DF-7029-4937-BD4C-78439A5B4651}</ProjectGuid>
     <OutputType>Library</OutputType>
     <NoStandardLibraries>false</NoStandardLibraries>
-    <AssemblyName>ClassLibrary</AssemblyName>
+    <AssemblyName>WsdotTravelerInfoContracts</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -18,7 +18,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\ClassLibrary.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\WsdotTravelerInfoContracts.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -27,10 +27,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\ClassLibrary.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\WsdotTravelerInfoContracts.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <RootNamespace>WsdotTravelerInfoContracts</RootNamespace>
+    <RootNamespace>Wsdot.Traffic</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -50,6 +50,7 @@
     <Compile Include="Ferries\Terminals\Terminals.cs" />
     <Compile Include="FlowData.cs" />
     <Compile Include="PassCondition.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoadwayLocation.cs" />
     <Compile Include="TravelTimeRoute.cs" />
   </ItemGroup>

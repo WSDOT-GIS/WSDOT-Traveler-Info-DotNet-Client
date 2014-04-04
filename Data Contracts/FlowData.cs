@@ -2,6 +2,9 @@
 
 namespace Wsdot.Traffic
 {
+    /// <summary>
+    /// Represents a traffic flow sensor.
+    /// </summary>
     public class FlowData
     {
         /// <summary>
@@ -36,13 +39,22 @@ namespace Wsdot.Traffic
 
     }
 
+    /// <summary>
+    /// Flow station reading.
+    /// </summary>
     public enum FlowStationReading
     {
+        /// <summary>Unknown</summary>
         Unknown,
+        /// <summary>Wide open</summary>
         WideOpen,
+        /// <summary>Moderate</summary>
         Moderate,
+        /// <summary>Heavy</summary>
         Heavy,
+        /// <summary>Stop and go</summary>
         StopAndGo,
+        /// <summary>No data</summary>
         NoData
     }
 }

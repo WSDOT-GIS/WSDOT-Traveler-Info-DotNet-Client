@@ -2,6 +2,9 @@
 
 namespace Wsdot.Traffic
 {
+    /// <summary>
+    /// Mountain pass condition.
+    /// </summary>
     public class PassCondition
     {
         /// <summary>
@@ -65,6 +68,9 @@ namespace Wsdot.Traffic
         public TravelRestriction RestrictionTwo { get; set; }
     }
 
+    /// <summary>
+    /// Travel restriction
+    /// </summary>
     public class TravelRestriction
     {
         /// <summary>

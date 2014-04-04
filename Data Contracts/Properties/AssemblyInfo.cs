@@ -1,16 +1,17 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Resources;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WSDOT Traveler Information API Client")]
-[assembly: AssemblyDescription("Client libraries for use with the WSDOT Traveler Information API.")]
+[assembly: AssemblyTitle("WSDOT Traveler Information API Contracts")]
+[assembly: AssemblyDescription("Data Contracts representing types returned by the WSDOT Traveler Information API")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("WSDOT")]
-[assembly: AssemblyProduct("Client")]
-[assembly: AssemblyCopyright("Copyright © 2014 Washington State Department of Transportation")]
+[assembly: AssemblyCompany("Washington State Department of Transportation (WSDOT)")]
+[assembly: AssemblyProduct("WSDOT Traveler Information API")]
+[assembly: AssemblyCopyright("© 2014 Washington State Department of Transportation (WSDOT)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +21,7 @@ using System.Resources;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("b83a9609-b90e-42d4-b842-f6e59aaee76a")]
+[assembly: Guid("1ee921f7-af3d-4d2d-961f-e07513d20352")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,9 +30,6 @@ using System.Resources;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.0")]
+[assembly: AssemblyFileVersion("1.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

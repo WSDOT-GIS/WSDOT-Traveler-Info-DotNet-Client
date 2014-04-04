@@ -2,6 +2,9 @@
 
 namespace Wsdot.Traffic
 {
+    /// <summary>
+    /// Travel time route
+    /// </summary>
     public class TravelTimeRoute
     {
         /// <summary>

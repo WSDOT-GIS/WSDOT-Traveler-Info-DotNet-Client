@@ -2,6 +2,33 @@
 
 namespace WsdotTravelerInfoContracts.Ferries.Terminals
 {
+	/// <summary>
+	/// Sailing space.
+	/// </summary>
+	public class SailingSpace
+	{
+		/// <summary>Unique identifier for a terminal.</summary>
+		public int TerminalID { get; set; }
+		/// <summary>Identifies this terminal as a unique WSF subject.</summary>
+		public int TerminalSubjectID { get; set; }
+		/// <summary>Identifies the geographical region where the terminal is located.</summary>
+		public int RegionID { get; set; }
+		/// <summary>The name of the terminal.</summary>
+		public string TerminalName { get; set; }
+		/// <summary>The terminal's abbreviation.</summary>
+		public string TerminalAbbrev { get; set; }
+		/// <summary>A preferred sort order (sort-ascending with respect to other terminals).</summary>
+		public int SortSeq { get; set; }
+
+		/// <summary>
+		/// The most recent departures leaving this terminal.
+		/// </summary>
+		public DepartingSpace[] DepartingSpaces { get; set; }
+	}
+
+	/// <summary>
+	/// Space for arrival terminal
+	/// </summary>
 	public class SpaceForArrivalTerminal
 	{
 		/// <summary>Unique identifier for the arrival terminal.</summary>
@@ -28,6 +55,9 @@ namespace WsdotTravelerInfoContracts.Ferries.Terminals
 		public int MaxSpaceCount { get; set; }
 	}
 
+	/// <summary>
+	/// Departing space.
+	/// </summary>
 	public class DepartingSpace
 	{
 		/// <summary>The date and time of the departure.</summary>
