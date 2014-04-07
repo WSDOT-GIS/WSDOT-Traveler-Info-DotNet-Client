@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Wsdot.Traffic;
@@ -47,6 +48,40 @@ namespace UnitTest
 			TestArrays(cvrs);
 		}
 
+		bool LineSegmentIsValid(ILineSegment lineSegment)
+		{
+			bool output = true;
+			if (lineSegment.Line != null)
+			{
+				foreach (var linestring in lineSegment.Line)
+				{
+					foreach (var point in linestring)
+					{
+						if (point.Length < 2)
+						{
+							output = false;
+							break;
+						}
+					}
+				}
+			}
+			return output;
+		}
+
+		bool LineSegmentsAreValid<T>(IEnumerable<T> lineSegments) where T : ILineSegment
+		{
+			bool output = true;
+			foreach (ILineSegment item in lineSegments)
+			{
+				if (!LineSegmentIsValid(item))
+				{
+					output = false;
+					break;
+				}
+			}
+			return output;
+		}
+
 		[TestMethod]
 		public void TestAlerts()
 		{
@@ -55,6 +90,7 @@ namespace UnitTest
 			_trafficClient.GetAlerts(true).ContinueWith(task =>
 			{
 				alerts = task.Result;
+				Assert.IsTrue(LineSegmentsAreValid(alerts));
 			}).Wait();
 			
 			TestArrays(alerts);

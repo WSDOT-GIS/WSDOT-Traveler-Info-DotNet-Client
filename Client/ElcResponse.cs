@@ -17,6 +17,7 @@ namespace Wsdot.Traffic.Client
 
 	class ElcRouteLocation
 	{
+		public int? Id { get; set; }
 		public float? Arm { get; set; }
 		public int? ArmCalcEndReturnCode { get; set; }
 		public string ArmCalcEndReturnMessage { get; set; }
@@ -28,11 +29,12 @@ namespace Wsdot.Traffic.Client
 		public DateTime? EndRealignDate { get; set; }
 		public DateTime? EndReferenceDate { get; set; }
 		public DateTime? EndResponseDate { get; set; }
-		public int? EndSrmp { get; set; }
+		public float? EndSrmp { get; set; }
 		public DateTime? RealignmentDate { get; set; }
 		public DateTime? ReferenceDate { get; set; }
 		public DateTime? ResponseDate { get; set; }
 		public string Route { get; set; }
+		public string LocatingError { get; set; }
 		public RouteSegment RouteGeometry { get; set; }
 		public float? Srmp { get; set; }
 	}

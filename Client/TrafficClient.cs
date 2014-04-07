@@ -88,26 +88,32 @@ namespace Wsdot.Traffic.Client
 			return output;
 		}
 
+		/// <summary>
+		/// Determines if an <see cref="ILineSegment"/> has a valid <see cref="ILineSegment.StartRoadwayLocation"/>, 
+		/// <see cref="ILineSegment.EndRoadwayLocation"/> and <see cref="RoadwayLocation.RoadName"/>.
+		/// </summary>
+		/// <param name="lineSegment"></param>
+		/// <returns></returns>
 		private bool LineSegmentIsValid(ILineSegment lineSegment)
 		{
 			return lineSegment.StartRoadwayLocation != null && lineSegment.EndRoadwayLocation != null
 				&& !string.IsNullOrWhiteSpace(lineSegment.StartRoadwayLocation.RoadName);
 		}
 
-		/// <summary>
-		/// Used for serializing the results of an ELC operation.
-		/// </summary>
-		class ElcResult
-		{
-			public class LineSegment
-			{
-				public double[][][] paths { get; set; }
-			}
+		/////// <summary>
+		/////// Used for serializing the results of an ELC operation. It contains only the properties that are used by its parent class.
+		/////// </summary>
+		////class ElcResult
+		////{
+		////	public class LineSegment
+		////	{
+		////		public double[][][] paths { get; set; }
+		////	}
 
-			public int Id { get; set; }
+		////	public int Id { get; set; }
 
-			public LineSegment RouteGeometry { get; set; }
-		}
+		////	public LineSegment RouteGeometry { get; set; }
+		////}
 
 
 
@@ -155,11 +161,11 @@ namespace Wsdot.Traffic.Client
 						var serializer = JsonSerializer.CreateDefault(new JsonSerializerSettings { 
 							MissingMemberHandling = MissingMemberHandling.Ignore
 						});
-						var elcResults = serializer.Deserialize<ElcResult[]>(jsonReader);
+						var elcResults = serializer.Deserialize<ElcRouteLocation[]>(jsonReader);
 
 						foreach (var item in elcResults)
 						{
-							var location = locations.ElementAtOrDefault(item.Id);
+							var location = locations.ElementAtOrDefault(item.Id.Value);
 							if (location != null && item.RouteGeometry != null && item.RouteGeometry.paths != null)
 							{
 								location.Line = item.RouteGeometry.paths;
