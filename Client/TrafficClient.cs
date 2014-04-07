@@ -126,7 +126,7 @@ namespace Wsdot.Traffic.Client
 				return new
 				{
 					Id = i++,
-					Route = s.StartRoadwayLocation.RoadName.CreateValidRouteId(),
+					Route = s.StartRoadwayLocation.RoadName.CreateValidRouteId(), // The CVRestriction endpoint returns route names in non-standard format.
 					Srmp = s.StartRoadwayLocation.MilePost,
 					EndSrmp = s.EndRoadwayLocation.MilePost
 				};
