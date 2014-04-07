@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Wsdot.Traffic.Contracts.Elc;
 
 namespace Wsdot.Traffic
 {
@@ -21,8 +22,8 @@ namespace Wsdot.Traffic
 		RoadwayLocation EndRoadwayLocation { get; set; }
 
 		/// <summary>
-		/// Line segment between the start and end roadway location.
+		/// The route location as calculated by the ELC.
 		/// </summary>
-		double[][][] Line { get; set; }
+		ElcRouteLocation RouteLocation { get; set; }
 	}
 }

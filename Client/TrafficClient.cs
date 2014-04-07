@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json.Linq;
+using Wsdot.Traffic.Contracts.Elc;
 
 namespace Wsdot.Traffic.Client
 {
@@ -166,10 +167,7 @@ namespace Wsdot.Traffic.Client
 						foreach (var item in elcResults)
 						{
 							var location = locations.ElementAtOrDefault(item.Id.Value);
-							if (location != null && item.RouteGeometry != null && item.RouteGeometry.paths != null)
-							{
-								location.Line = item.RouteGeometry.paths;
-							}
+							location.RouteLocation = item;
 						}
 					}
 				}

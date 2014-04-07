@@ -1,4 +1,5 @@
 ﻿using System;
+using Wsdot.Traffic.Contracts.Elc;
 
 namespace Wsdot.Traffic
 {
@@ -67,12 +68,8 @@ namespace Wsdot.Traffic
         public RoadwayLocation StartRoadwayLocation { get; set; }
         /// <summary>The end location of the restriction.</summary>
         public RoadwayLocation EndRoadwayLocation { get; set; }
-
-
-        /// <summary>
-        /// Line segment between <see cref="StartRoadwayLocation"/> and <see cref="EndRoadwayLocation"/>
-        /// </summary>
-        public double[][][] Line { get; set; }
+        /// <summary>Route location returned from the ELC.</summary>
+        public ElcRouteLocation RouteLocation { get; set; }
     }
 
     /// <summary>
