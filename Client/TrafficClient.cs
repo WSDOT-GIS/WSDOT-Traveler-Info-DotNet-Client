@@ -1,7 +1,11 @@
 ﻿using Newtonsoft.Json;
+using System.Linq;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System;
+using Newtonsoft.Json.Linq;
 
 namespace Wsdot.Traffic.Client
 {
@@ -16,6 +20,9 @@ namespace Wsdot.Traffic.Client
 		public string AccessCode { get; set; }
 
 		const string _defaultApiRoot = "http://www.wsdot.wa.gov/Traffic/api";
+		const string _defaultElcUrl = "http://www.wsdot.wa.gov/geoservices/arcgis/rest/services/Shared/ElcRestSOE/MapServer/exts/ElcRestSoe";
+		const string _defaultFindRouteLocationsEndpoint = "Find Route Locations";
+		////const string _defaultFindNearestRouteLocationsEndpoint = "Find Nearest Route Locations";
 
 		private string _apiRoot = _defaultApiRoot;
 
@@ -27,6 +34,18 @@ namespace Wsdot.Traffic.Client
 			get { return _apiRoot; }
 			set { _apiRoot = value; }
 		}
+
+		private string _elcUrl = string.Join("/", _defaultElcUrl, _defaultFindRouteLocationsEndpoint);
+
+		/// <summary>
+		/// The URL for the ELC extension
+		/// </summary>
+		public string ElcUrl
+		{
+			get { return _elcUrl; }
+			set { _elcUrl = value; }
+		}
+
 
 		/// <summary>
 		/// Performs an HTTP request and serializes the response to a specific type.
@@ -48,6 +67,108 @@ namespace Wsdot.Traffic.Client
 			return output;
 		}
 
+		/// <summary>
+		/// Performs an HTTP request and serializes the response to a specific type.
+		/// </summary>
+		/// <typeparam name="CType">The type of output collection.</typeparam>
+		/// <typeparam name="T">The output type.</typeparam>
+		/// <param name="url">The URL of the HTTP request.</param>
+		/// <param name="findSegment">Determines if an additional HTTP request will be made to determine the route segment geometry</param>
+		/// <returns>Returns an object of type <typeparamref name="T"/>.</returns>
+		private async Task<CType> DoRequest<CType,T>(string url, bool findSegment=false) 
+			where T:ILineSegment, new()
+			where CType:IEnumerable<T>
+		{
+			CType output;
+			output = await DoRequest<CType>(url);
+			if (findSegment)
+			{
+				await GetRouteLocations(output);
+			}
+			return output;
+		}
+
+		private bool LineSegmentIsValid(ILineSegment lineSegment)
+		{
+			return lineSegment.StartRoadwayLocation != null && lineSegment.EndRoadwayLocation != null
+				&& !string.IsNullOrWhiteSpace(lineSegment.StartRoadwayLocation.RoadName);
+		}
+
+		/// <summary>
+		/// Used for serializing the results of an ELC operation.
+		/// </summary>
+		class ElcResult
+		{
+			public class LineSegment
+			{
+				public double[][][] paths { get; set; }
+			}
+
+			public int Id { get; set; }
+
+			public LineSegment RouteGeometry { get; set; }
+		}
+
+
+
+
+
+		/// <summary>
+		/// Calls the ELC to add line segment information to Traffic API route locations with start and end points.
+		/// </summary>
+		/// <param name="locations"></param>
+		/// <returns></returns>
+		private async Task GetRouteLocations<T>(IEnumerable<T> locations) where T:ILineSegment
+		{
+			var i = 0;
+			// Convert locations to elc input.
+			var input = locations.Where(s => LineSegmentIsValid(s)).Select(s => {
+				return new
+				{
+					Id = i++,
+					Route = s.StartRoadwayLocation.RoadName.CreateValidRouteId(),
+					Srmp = s.StartRoadwayLocation.MilePost,
+					EndSrmp = s.EndRoadwayLocation.MilePost
+				};
+			});
+
+			// Serialize the input parameters into a JSON string.
+			string json = await Task.Run(() => JsonConvert.SerializeObject(input));
+
+			// Create the dictionary of parameters for the request.
+			var dict = new Dictionary<string, string>();
+			dict.Add("locations", json);
+			dict.Add("f", "json");
+			dict.Add("outSR", "4326");
+			dict.Add("referenceDate", DateTime.Today.ToShortDateString());
+
+			var content = new FormUrlEncodedContent(dict);
+
+			using (var client = new HttpClient())
+			using (var httpResponseMessage = await client.PostAsync(ElcUrl, content))
+			{
+				if (httpResponseMessage.IsSuccessStatusCode)
+				{
+					using (var streamReader = new StreamReader(await httpResponseMessage.Content.ReadAsStreamAsync()))
+					using (var jsonReader = new JsonTextReader(streamReader))
+					{
+						var serializer = JsonSerializer.CreateDefault(new JsonSerializerSettings { 
+							MissingMemberHandling = MissingMemberHandling.Ignore
+						});
+						var elcResults = serializer.Deserialize<ElcResult[]>(jsonReader);
+
+						foreach (var item in elcResults)
+						{
+							var location = locations.ElementAtOrDefault(item.Id);
+							if (location != null && item.RouteGeometry != null && item.RouteGeometry.paths != null)
+							{
+								location.Line = item.RouteGeometry.paths;
+							}
+						}
+					}
+				}
+			}
+		}
 
 
 		/// <summary>
@@ -65,20 +186,21 @@ namespace Wsdot.Traffic.Client
 		/// Get a complete list of all current commercial vehicle restrictions on WA State highways. 
 		/// </summary>
 		/// <returns>Returns a complete list of all current commercial vehicle restrictions on WA State highways.</returns>
-		public async Task<CVRestriction[]> GetCommercialVehicleRestrictions()
+		public async Task<CVRestriction[]> GetCommercialVehicleRestrictions(bool findSegment=false)
 		{
 			const string urlFmt = "{0}/CVRestrictions/CVRestrictionsREST.svc/GetCommercialVehicleRestrictionsAsJson?AccessCode={1}";
-			return await DoRequest<CVRestriction[]>(string.Format(urlFmt, this.ApiRoot, this.AccessCode));
+			return await DoRequest<CVRestriction[], CVRestriction>(string.Format(urlFmt, this.ApiRoot, this.AccessCode), findSegment);
 		}
 
 		/// <summary>
 		/// Retrieves an array of currently active incidents currently logged in our ROADS system.
 		/// </summary>
+		/// <param name="findSegment">Set to true if you want to perform an additional query to find the line geometry between the start and endpoints.</param>
 		/// <returns>An array of currently active incidents.</returns>
-		public async Task<Alert[]> GetAlerts()
+		public async Task<Alert[]> GetAlerts(bool findSegment=false)
 		{
 			const string urlFmt = "{0}/HighwayAlerts/HighwayAlertsREST.svc/GetAlertsAsJson?AccessCode={1}";
-			return await DoRequest<Alert[]>(string.Format(urlFmt, this.ApiRoot, this.AccessCode));
+			return await DoRequest<Alert[], Alert>(string.Format(urlFmt, this.ApiRoot, this.AccessCode), findSegment);
 		}
 
 		/// <summary>

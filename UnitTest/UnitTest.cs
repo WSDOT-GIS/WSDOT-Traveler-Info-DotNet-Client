@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.IO;
 using System.Linq;
 using Wsdot.Traffic;
 using Wsdot.Traffic.Client;
@@ -38,7 +39,7 @@ namespace UnitTest
 		public void TestCVRestrictions()
 		{
 			CVRestriction[] cvrs = null;
-			_trafficClient.GetCommercialVehicleRestrictions().ContinueWith(task =>
+			_trafficClient.GetCommercialVehicleRestrictions(true).ContinueWith(task =>
 			{
 				cvrs = task.Result;
 			}).Wait();
@@ -51,7 +52,7 @@ namespace UnitTest
 		{
 			Alert[] alerts = null;
 			
-			_trafficClient.GetAlerts().ContinueWith(task =>
+			_trafficClient.GetAlerts(true).ContinueWith(task =>
 			{
 				alerts = task.Result;
 			}).Wait();

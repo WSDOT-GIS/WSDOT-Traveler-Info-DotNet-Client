@@ -5,7 +5,7 @@ namespace Wsdot.Traffic
     /// <summary>
     /// Represents a Commercial Vehicle Restriction. 
     /// </summary>
-    public class CVRestriction
+    public class CVRestriction: ILineSegment
     {
         /// <summary>State route ID</summary>
         public string StateRouteID { get; set; }
@@ -67,6 +67,12 @@ namespace Wsdot.Traffic
         public RoadwayLocation StartRoadwayLocation { get; set; }
         /// <summary>The end location of the restriction.</summary>
         public RoadwayLocation EndRoadwayLocation { get; set; }
+
+
+        /// <summary>
+        /// Line segment between <see cref="StartRoadwayLocation"/> and <see cref="EndRoadwayLocation"/>
+        /// </summary>
+        public double[][][] Line { get; set; }
     }
 
     /// <summary>

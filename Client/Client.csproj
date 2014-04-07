@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ElcResponse.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="TrafficClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WsfClient.cs" />

@@ -5,7 +5,7 @@ namespace Wsdot.Traffic
     /// <summary>
     /// A highway alert.
     /// </summary>
-    public class Alert
+    public class Alert: ILineSegment
     {
         /// <summary>
         /// Unique Identifier for the alert
@@ -79,5 +79,10 @@ namespace Wsdot.Traffic
         /// When the impact on traffic began
         /// </summary>
         public DateTime StartTime { get; set; }
+
+        /// <summary>
+        /// Line segment between <see cref="StartRoadwayLocation"/> and <see cref="EndRoadwayLocation"/>
+        /// </summary>
+        public double[][][] Line { get; set; }
     }
 }
