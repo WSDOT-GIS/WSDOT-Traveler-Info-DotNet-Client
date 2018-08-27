@@ -20,6 +20,11 @@ namespace UnitTest
 		[TestInitialize]
 		public void TestInit()
 		{
+			const string apiCodeEnvVarName = "WSDOT_TRAFFIC_API_CODE";
+			string accessCode = Environment.GetEnvironmentVariable(apiCodeEnvVarName);
+			if (string.IsNullOrWhiteSpace(accessCode)) {
+				throw new Exception(string.Format("Environment variable {0} is not defined.", apiCodeEnvVarName));
+			}
 			_trafficClient = new TrafficClient { AccessCode = accessCode };
 			_wsfClient = new WsfClient { AccessCode = accessCode };
 		}
@@ -86,13 +91,13 @@ namespace UnitTest
 		public void TestAlerts()
 		{
 			Alert[] alerts = null;
-			
+
 			_trafficClient.GetAlerts(true).ContinueWith(task =>
 			{
 				alerts = task.Result;
 				////Assert.IsTrue(LineSegmentsAreValid(alerts));
 			}).Wait();
-			
+
 			TestArrays(alerts);
 
 			_trafficClient.GetAlert(alerts.First().AlertID).ContinueWith(task =>
