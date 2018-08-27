@@ -1,10 +1,10 @@
 ﻿
 namespace Wsdot.Traffic
 {
-	/// <summary>
-	/// Describes a specific location on a WA State Highway
-	/// </summary>
-	public class RoadwayLocation
+    /// <summary>
+    /// Describes a specific location on a WA State Highway
+    /// </summary>
+    public class RoadwayLocation
 	{
 		/// <summary>
 		/// A description of the location. This could be a cross street or a nearby landmark. 

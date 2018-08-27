@@ -10,6 +10,9 @@
     <Authors>WSDOT</Authors>
     <Description>Data Contracts representing types returned by the WSDOT Traveler Information API</Description>
     <PackageId>Wsdot.TravelerInfo.Contracts</PackageId>
+    <AssemblyName>Wsdot.Traffic.Contracts</AssemblyName>
+    <RootNamespace>Wsdot.Traffic.Contracts</RootNamespace>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
 </Project>

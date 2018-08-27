@@ -1,214 +1,166 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Wsdot.Traffic;
 using Wsdot.Traffic.Client;
 using WsdotTravelerInfoContracts.Ferries.Terminals;
 
 namespace UnitTest
 {
-	[TestClass]
-	public partial class UnitTest
-	{
-		public TestContext TestContext { get; set; }
+    [TestClass]
+    public class UnitTest
+    {
+        public TestContext TestContext { get; set; }
 
-		TrafficClient _trafficClient;
-		WsfClient _wsfClient;
+        TrafficClient _trafficClient;
+        WsfClient _wsfClient;
 
-		[TestInitialize]
-		public void TestInit()
-		{
-			const string apiCodeEnvVarName = "WSDOT_TRAFFIC_API_CODE";
-			string accessCode = Environment.GetEnvironmentVariable(apiCodeEnvVarName);
-			if (string.IsNullOrWhiteSpace(accessCode)) {
-				throw new Exception(string.Format("Environment variable {0} is not defined.", apiCodeEnvVarName));
-			}
-			_trafficClient = new TrafficClient { AccessCode = accessCode };
-			_wsfClient = new WsfClient { AccessCode = accessCode };
-		}
+        [TestInitialize]
+        public void TestInit()
+        {
+            const string apiCodeEnvVarName = "WSDOT_TRAFFIC_API_CODE";
+            string accessCode = Environment.GetEnvironmentVariable(apiCodeEnvVarName);
+            if (string.IsNullOrWhiteSpace(accessCode)) {
+                throw new Exception(string.Format("Environment variable {0} is not defined.", apiCodeEnvVarName));
+            }
+            _trafficClient = new TrafficClient { AccessCode = accessCode };
+            _wsfClient = new WsfClient { AccessCode = accessCode };
+        }
 
-		[TestMethod]
-		public void TestBorderCrossings()
-		{
-			BorderCrossingData[] bcs = null;
-			_trafficClient.GetBorderCrossings().ContinueWith(task =>
-			{
-				bcs = task.Result;
-			}).Wait();
+        [TestMethod]
+        public async Task TestBorderCrossings()
+        {
+            BorderCrossingData[] bcs = await _trafficClient.GetBorderCrossings();
+            TestArrays(bcs);
+        }
 
-			TestArrays(bcs);
-		}
+        [TestMethod]
+        public async Task TestCVRestrictions()
+        {
+            CVRestriction[] cvrs = await _trafficClient.GetCommercialVehicleRestrictions(true);
+            TestArrays(cvrs);
+        }
 
-		[TestMethod]
-		public void TestCVRestrictions()
-		{
-			CVRestriction[] cvrs = null;
-			_trafficClient.GetCommercialVehicleRestrictions(true).ContinueWith(task =>
-			{
-				cvrs = task.Result;
-			}).Wait();
+        ////bool LineSegmentIsValid(ILineSegment lineSegment)
+        ////{
+        ////	bool output = true;
+        ////	if (lineSegment.Line != null)
+        ////	{
+        ////		foreach (var linestring in lineSegment.Line)
+        ////		{
+        ////			foreach (var point in linestring)
+        ////			{
+        ////				if (point.Length < 2)
+        ////				{
+        ////					output = false;
+        ////					break;
+        ////				}
+        ////			}
+        ////		}
+        ////	}
+        ////	return output;
+        ////}
 
-			TestArrays(cvrs);
-		}
+        ////bool LineSegmentsAreValid<T>(IEnumerable<T> lineSegments) where T : ILineSegment
+        ////{
+        ////	bool output = true;
+        ////	foreach (ILineSegment item in lineSegments)
+        ////	{
+        ////		if (!LineSegmentIsValid(item))
+        ////		{
+        ////			output = false;
+        ////			break;
+        ////		}
+        ////	}
+        ////	return output;
+        ////}
 
-		////bool LineSegmentIsValid(ILineSegment lineSegment)
-		////{
-		////	bool output = true;
-		////	if (lineSegment.Line != null)
-		////	{
-		////		foreach (var linestring in lineSegment.Line)
-		////		{
-		////			foreach (var point in linestring)
-		////			{
-		////				if (point.Length < 2)
-		////				{
-		////					output = false;
-		////					break;
-		////				}
-		////			}
-		////		}
-		////	}
-		////	return output;
-		////}
+        [TestMethod]
+        public async Task TestAlerts()
+        {
+            Alert[] alerts = await _trafficClient.GetAlerts(true);
+            TestArrays(alerts);
 
-		////bool LineSegmentsAreValid<T>(IEnumerable<T> lineSegments) where T : ILineSegment
-		////{
-		////	bool output = true;
-		////	foreach (ILineSegment item in lineSegments)
-		////	{
-		////		if (!LineSegmentIsValid(item))
-		////		{
-		////			output = false;
-		////			break;
-		////		}
-		////	}
-		////	return output;
-		////}
+            var alert = await _trafficClient.GetAlert(alerts.First().AlertID);
+            Assert.IsNotNull(alert);
 
-		[TestMethod]
-		public void TestAlerts()
-		{
-			Alert[] alerts = null;
+            var categories = await _trafficClient.GetAlertEventCategories();
+            Assert.IsNotNull(categories);
+            Assert.IsTrue(categories.Length > 0);
+            CollectionAssert.AllItemsAreNotNull(categories);
+            CollectionAssert.AllItemsAreUnique(categories);
+        }
 
-			_trafficClient.GetAlerts(true).ContinueWith(task =>
-			{
-				alerts = task.Result;
-				////Assert.IsTrue(LineSegmentsAreValid(alerts));
-			}).Wait();
+        [TestMethod]
+        public async Task TestCameras()
+        {
+            Camera[] cameras = await _trafficClient.GetCameras();
+            TestArrays(cameras);
+            var camera = await _trafficClient.GetCamera(cameras.First().CameraID);
+            Assert.IsNotNull(camera);
+        }
 
-			TestArrays(alerts);
+        [TestMethod]
+        public async Task TestMountainPasses()
+        {
+            PassCondition[] conditions = await _trafficClient.GetMountainPassConditions();
+            TestArrays(conditions);
+            var condition = await _trafficClient.GetMountainPassCondition(conditions.First().MountainPassId);
+            Assert.IsNotNull(condition);
+        }
 
-			_trafficClient.GetAlert(alerts.First().AlertID).ContinueWith(task =>
-			{
-				var alert = task.Result;
-				Assert.IsNotNull(alert);
-			}).Wait();
+        [TestMethod]
+        public async Task TestTrafficFlows()
+        {
+            FlowData[] flows = await _trafficClient.GetTrafficFlows();
+            var flow = await _trafficClient.GetTrafficFlow(flows.First().FlowDataID);
+            Assert.IsNotNull(flow);
+        }
 
-			_trafficClient.GetAlertEventCategories().ContinueWith(task => {
-				var categories = task.Result;
-				Assert.IsNotNull(categories);
-				Assert.IsTrue(categories.Length > 0);
-				CollectionAssert.AllItemsAreNotNull(categories);
-				CollectionAssert.AllItemsAreUnique(categories);
-			}).Wait();
-		}
+        [TestMethod]
+        public async Task TestTravelTimes()
+        {
+            TravelTimeRoute[] travelTimes = await _trafficClient.GetTravelTimes();
+            TestArrays(travelTimes);
+            var tTime = _trafficClient.GetTravelTime(travelTimes.First().TravelTimeID);
+            Assert.IsNotNull(tTime);
+        }
 
-		[TestMethod]
-		public void TestCameras()
-		{
-			Camera[] cameras = null;
-			_trafficClient.GetCameras().ContinueWith(task => {
-				cameras = task.Result;
-			}).Wait();
-			TestArrays(cameras);
-			_trafficClient.GetCamera(cameras.First().CameraID).ContinueWith(task => {
-				Assert.IsNotNull(task.Result);
-			});
-		}
+        private void TestArrays(Array arr)
+        {
+            Assert.IsNotNull(arr);
+            Assert.IsTrue(arr.Length > 0);
+        }
 
-		[TestMethod]
-		public void TestMountainPasses()
-		{
-			PassCondition[] conditions = null;
-			_trafficClient.GetMountainPassConditions().ContinueWith(task => {
-				conditions = task.Result;
-			}).Wait();
-			TestArrays(conditions);
-			_trafficClient.GetMountainPassCondition(conditions.First().MountainPassId).ContinueWith(t =>
-			{
-				Assert.IsNotNull(t.Result);
-			}).Wait();
-		}
+        #region WSF Tests
 
-		[TestMethod]
-		public void TestTrafficFlows()
-		{
-			FlowData[] flows = null;
-			_trafficClient.GetTrafficFlows().ContinueWith(t => {
-				flows = t.Result;
-			}).Wait();
-			TestArrays(flows);
-			_trafficClient.GetTrafficFlow(flows.First().FlowDataID).ContinueWith(t => {
-				Assert.IsNotNull(t.Result);
-			}).Wait();
-		}
+        [TestMethod]
+        public async Task TestCacheFlushDate()
+        {
+            DateTimeOffset cacheFlushDate = await _wsfClient.GetCacheFlushDate();
+            TestContext.WriteLine("Cache Flush Date: {0}", cacheFlushDate);
+            Assert.IsTrue(cacheFlushDate > default(DateTimeOffset));
+        }
 
-		[TestMethod]
-		public void TestTravelTimes()
-		{
-			TravelTimeRoute[] travelTimes = null;
-			_trafficClient.GetTravelTimes().ContinueWith(t => {
-				travelTimes = t.Result;
-			}).Wait();
-			TestArrays(travelTimes);
-			_trafficClient.GetTravelTime(travelTimes.First().TravelTimeID).ContinueWith(t => {
-				Assert.IsNotNull(t.Result);
-			}).Wait();
-		}
+        [TestMethod]
+        public async Task TestWsfQueries()
+        {
+            var queryTypes = Enum.GetValues(typeof(TerminalQueryType));
 
-		private void TestArrays(Array arr)
-		{
-			Assert.IsNotNull(arr);
-			Assert.IsTrue(arr.Length > 0);
-		}
+            foreach (TerminalQueryType qt in queryTypes)
+            {
+                TestContext.WriteLine("Performing test on {0}...", qt);
+                var terminals = await _wsfClient.Query<Terminal[]>(qt);
+                Assert.IsNotNull(terminals);
+                Assert.IsTrue(terminals.Length > 0);
 
-		#region WSF Tests
+                var terminal = await _wsfClient.Query(qt, terminals.First().TerminalID);
+                Assert.IsNotNull(terminal);
+                TestContext.WriteLine("Completed test on {0}...", qt);
+            }
+        }
 
-		[TestMethod]
-		public void TestCacheFlushDate()
-		{
-			DateTimeOffset cacheFlushDate;
-			_wsfClient.GetCacheFlushDate().ContinueWith(t => {
-				cacheFlushDate = t.Result;
-				TestContext.WriteLine("Cache Flush Date: {0}", cacheFlushDate);
-			}).Wait();
-
-		}
-
-		[TestMethod]
-		public void TestWsfQueries()
-		{
-			var queryTypes = Enum.GetValues(typeof(TerminalQueryType));
-
-			foreach (TerminalQueryType qt in queryTypes)
-			{
-				TestContext.WriteLine("Performing test on {0}...", qt);
-				var task = _wsfClient.Query<Terminal[]>(qt);
-				task.Wait();
-				Terminal[] terminals = task.Result;
-				Assert.IsNotNull(terminals);
-				Assert.IsTrue(terminals.Length > 0);
-
-				var task2 = _wsfClient.Query(qt, terminals.First().TerminalID);
-				task2.Wait();
-				Terminal terminal = task2.Result;
-				Assert.IsNotNull(terminal);
-				TestContext.WriteLine("Completed test on {0}...", qt);
-			}
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }

@@ -32,10 +32,10 @@ namespace Wsdot.Traffic.Client
 	/// <summary>
 	/// Client for calling WA State Ferries REST endpoints. <see href="http://www.wsdot.wa.gov/ferries/api/terminals/documentation/rest.html"/>
 	/// </summary>
-	public class WsfClient
+	public class WsfClient: HttpClient
 	{
 		/// <summary>Creates a new instance of this class.</summary>
-		public WsfClient() { }
+		public WsfClient(): base() { }
 
 		/// <summary>
 		/// Creates a new instance of this class.
@@ -47,7 +47,15 @@ namespace Wsdot.Traffic.Client
 			this.AccessCode = accessCode;
 		}
 
-		const string _defaultFerriesApiRoot = "http://www.wsdot.wa.gov/ferries/api/terminals/rest";
+        public WsfClient(HttpMessageHandler handler) : base(handler)
+        {
+        }
+
+        public WsfClient(HttpMessageHandler handler, bool disposeHandler) : base(handler, disposeHandler)
+        {
+        }
+
+        const string _defaultFerriesApiRoot = "https://www.wsdot.wa.gov/ferries/api/terminals/rest";
 
 		private string _wsfApiRoot = _defaultFerriesApiRoot;
 
@@ -75,11 +83,8 @@ namespace Wsdot.Traffic.Client
 		public async Task<DateTimeOffset> GetCacheFlushDate()
 		{
 			DateTimeOffset result;
-			using (var client = new HttpClient())
-			{
-				var dateString = await client.GetStringAsync(string.Join("/", WsfApiRoot, "cacheflushdate"));
-				result = JsonConvert.DeserializeObject<DateTimeOffset>(dateString);
-			}
+			var dateString = await GetStringAsync(string.Join("/", WsfApiRoot, "cacheflushdate"));
+			result = JsonConvert.DeserializeObject<DateTimeOffset>(dateString);
 			// Clear the cached results if the content has been updated since then.
 			if (result > _lastCacheFlushDate)
 			{
@@ -128,8 +133,7 @@ namespace Wsdot.Traffic.Client
 			// If there is no cached value available, query the API and return the results.
 			if (output == null)
 			{
-				using (var client = new HttpClient())
-				using (var stream = await client.GetStreamAsync(url))
+				using (var stream = await GetStreamAsync(url))
 				using (var reader = new StreamReader(stream))
 				using (var jsonReader = new JsonTextReader(reader))
 				{

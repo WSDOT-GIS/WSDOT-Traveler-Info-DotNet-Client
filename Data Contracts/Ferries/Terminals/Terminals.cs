@@ -2,10 +2,10 @@
 
 namespace WsdotTravelerInfoContracts.Ferries.Terminals
 {
-	/// <summary>
-	/// Where this terminal should appear on a GIS map (at various zoom levels).
-	/// </summary>
-	public class ZoomLocation
+    /// <summary>
+    /// Where this terminal should appear on a GIS map (at various zoom levels).
+    /// </summary>
+    public class ZoomLocation
 	{
 		/// <summary>The GIS zoom level</summary>
 		public int ZoomLevel { get; set; }

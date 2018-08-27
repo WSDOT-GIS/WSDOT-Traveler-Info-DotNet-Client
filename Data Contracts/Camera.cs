@@ -1,10 +1,10 @@
 ﻿
 namespace Wsdot.Traffic
 {
-	/// <summary>
-	/// A traffic camera.
-	/// </summary>
-	public class Camera
+    /// <summary>
+    /// A traffic camera.
+    /// </summary>
+    public class Camera
 	{
 		/// <summary>Unique identifier of the camera.</summary>
 		public int CameraID { get; set; }

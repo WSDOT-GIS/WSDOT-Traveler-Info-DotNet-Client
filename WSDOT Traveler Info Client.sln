@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{EDF6330C-DA3C-498C-9AE1-AFA65E5D9F58}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WsdotTravelerInfoContracts", "Data Contracts\WsdotTravelerInfoContracts.csproj", "{41701338-F5ED-4DFB-9557-FA957AF4D87B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Data Contracts\Contracts.csproj", "{41701338-F5ED-4DFB-9557-FA957AF4D87B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "UnitTest\UnitTest.csproj", "{BB6EEC64-EAF8-474A-B0FA-400119E5199F}"
 EndProject

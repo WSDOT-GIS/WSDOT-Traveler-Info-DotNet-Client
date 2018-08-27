@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System;
-using Newtonsoft.Json.Linq;
 using Wsdot.Traffic.Contracts.Elc;
 
 namespace Wsdot.Traffic.Client
@@ -13,7 +12,7 @@ namespace Wsdot.Traffic.Client
     /// <summary>
     /// A client for <see href="https://www.wsdot.wa.gov/Traffic/api/">the WSDOT Traveler Information API</see>.
     /// </summary>
-    public class TrafficClient
+    public class TrafficClient: HttpClient
     {
         /// <summary>
         /// The <see href="https://www.wsdot.wa.gov/Traffic/api/">Traffic API Access Code</see> that will be used for querying the API.
@@ -38,6 +37,18 @@ namespace Wsdot.Traffic.Client
 
         private string _elcUrl = string.Join("/", _defaultElcUrl, _defaultFindRouteLocationsEndpoint);
 
+        public TrafficClient()
+        {
+        }
+
+        public TrafficClient(HttpMessageHandler handler) : base(handler)
+        {
+        }
+
+        public TrafficClient(HttpMessageHandler handler, bool disposeHandler) : base(handler, disposeHandler)
+        {
+        }
+
         /// <summary>
         /// The URL for the ELC extension
         /// </summary>
@@ -57,8 +68,7 @@ namespace Wsdot.Traffic.Client
         private async Task<T> DoRequest<T>(string url)
         {
             T output;
-            using (var client = new HttpClient())
-            using (var stream = await client.GetStreamAsync(url))
+            using (var stream = await GetStreamAsync(url))
             using (var streamReader = new StreamReader(stream))
             using (var jsonReader = new JsonTextReader(streamReader))
             {
@@ -153,8 +163,7 @@ namespace Wsdot.Traffic.Client
 
             var content = new FormUrlEncodedContent(dict);
 
-            using (var client = new HttpClient())
-            using (var httpResponseMessage = await client.PostAsync(ElcUrl, content))
+            using (var httpResponseMessage = await PostAsync(ElcUrl, content))
             {
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {

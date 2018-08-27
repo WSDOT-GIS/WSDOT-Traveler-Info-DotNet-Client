@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Wsdot.Traffic.Contracts.Elc
 {
-	/// <summary>
-	/// Represents a spatial reference system.
-	/// </summary>
-	public class SpatialReference
+    /// <summary>
+    /// Represents a spatial reference system.
+    /// </summary>
+    public class SpatialReference
 	{
 		/// <summary>
 		/// The Well-Known Identifier of the spatial reference system.

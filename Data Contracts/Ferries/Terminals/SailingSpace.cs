@@ -2,10 +2,10 @@
 
 namespace WsdotTravelerInfoContracts.Ferries.Terminals
 {
-	/// <summary>
-	/// Sailing space.
-	/// </summary>
-	public class SailingSpace
+    /// <summary>
+    /// Sailing space.
+    /// </summary>
+    public class SailingSpace
 	{
 		/// <summary>Unique identifier for a terminal.</summary>
 		public int TerminalID { get; set; }
