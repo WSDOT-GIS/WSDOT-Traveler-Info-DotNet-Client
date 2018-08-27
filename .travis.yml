@@ -1,0 +1,6 @@
+language: csharp
+solution: WSDOT Traveler Info Client.sln
+dotnet: 2.1.400
+mono: none
+script:
+    dotnet test UnitTest/UnitTest.csproj
