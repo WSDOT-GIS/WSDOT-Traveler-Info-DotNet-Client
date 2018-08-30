@@ -11,7 +11,11 @@ namespace Wsdot.Traffic.Client
         /// <example>E.g., Converts SR 5 to 005.</example>
         /// </summary>
         /// <param name="inputId">A string containing a route name.</param>
-        /// <returns></returns>
+        /// <param name="throwOnInvalid">
+        /// Set to <see langword="true"/> to throw an exception if the input cannot be parsed, 
+        /// <see langword="false"/> to return <see langword="null"/> in that case.
+        /// </param>
+        /// <returns>Returns a state route ID (or possibly <see langword="null"/> if <paramref name="throwOnInvalid"/> is <see langword="false"/>.)</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="inputId"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">Thrown if a route number could not be detected in <paramref name="inputId"/>.</exception>
         public static string CreateValidRouteId(this string inputId, bool throwOnInvalid = true)
@@ -20,8 +24,9 @@ namespace Wsdot.Traffic.Client
             {
                 if (throwOnInvalid)
                 {
-                    throw new ArgumentNullException("inputId");
-                } else
+                    throw new ArgumentNullException(nameof(inputId));
+                }
+                else
                 {
                     return null;
                 }
@@ -42,13 +47,22 @@ namespace Wsdot.Traffic.Client
             }
             if (throwOnInvalid)
             {
-                throw new ArgumentException(string.Format("Could not convert {0} into a valid state route.", inputId), "inputId");
-            } else
+                throw new ArgumentException(string.Format("Could not convert {0} into a valid state route.", inputId), nameof(inputId));
+            }
+            else
             {
                 return null;
             }
         }
 
+        /// <summary>
+        /// Gets a valid Route ID to use with the ELC, if possible.
+        /// Normally it will be the <see cref="RoadwayLocation.RoadName"/> of <see cref="ILineSegment.StartRoadwayLocation"/>,
+        /// and if that's not valid, that of <see cref="ILineSegment.EndRoadwayLocation"/>.
+        /// </summary>
+        /// <param name="lineSegment">A traffic API object that implements <see cref="ILineSegment"/></param>
+        /// <returns>Normally it will be the <see cref="RoadwayLocation.RoadName"/> of <see cref="ILineSegment.StartRoadwayLocation"/>,
+        /// and if that's not valid, that of <see cref="ILineSegment.EndRoadwayLocation"/>.</returns>
         public static string GetRouteId(this ILineSegment lineSegment)
         {
             var segments = new[] { lineSegment.StartRoadwayLocation, lineSegment.EndRoadwayLocation };
