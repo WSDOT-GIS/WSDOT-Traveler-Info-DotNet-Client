@@ -22,7 +22,9 @@ namespace Wsdot.Traffic
 		public int ImageHeight { get; set; }
 		/// <summary>The width of the camera image.</summary>
 		public int ImageWidth { get; set; }
-		/// <summary>Indicates if the camera is currently active.</summary>
+        /// <summary>Image URL</summary>
+        public string ImageUrl { get; set; }
+        /// <summary>Indicates if the camera is currently active.</summary>
 		public bool IsActive { get; set; }
 		/// <summary>The URL of the camera owner.</summary>
 		public string OwnerUrl { get; set; }

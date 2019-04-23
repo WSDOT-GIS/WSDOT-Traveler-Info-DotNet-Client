@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Product>WSDOT Traveler Information API</Product>
     <Company>Washington State Department of Transportation (WSDOT)</Company>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
+    <AssemblyVersion>2.0.1.0</AssemblyVersion>
+    <FileVersion>2.0.1.0</FileVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>WSDOT</Authors>
     <Description>Data Contracts representing types returned by the WSDOT Traveler Information API</Description>
