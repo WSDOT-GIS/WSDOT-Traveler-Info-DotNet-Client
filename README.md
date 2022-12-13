@@ -1,6 +1,8 @@
 WSDOT Traveler Information API Client for .NET
 ==============================================
 
+This code is no longer being actively maintained.
+
 .NET client for [Traveler Information API].
 
 [![Travis CI](https://img.shields.io/travis/WSDOT-GIS/WSDOT-Traveler-Info-DotNet-Client/master.svg?style=flat-square)](https://travis-ci.org/WSDOT-GIS/WSDOT-Traveler-Info-DotNet-Client)
